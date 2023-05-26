@@ -112,7 +112,7 @@ function removeLeadingAndTrailingWhitespaces(value) {
  */
 function repeatString(value, count) {
   const res = [];
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < count; i += 1) {
     res.push(value);
   }
   return res.join('');
@@ -131,14 +131,10 @@ function repeatString(value, count) {
  *   'ABABAB','BA' => 'ABAB'
  */
 function removeFirstOccurrences(str, value) {
-  const lv = value.length;
-  const ls = str.length;
-
-  for (let i = 0; i < ls; i++) {
-    if (str.slice(i, i + lv) === value) {
-      return (str.slice(0, i) + str.slice(i + lv, ls));
-    }
-  }
+  const index = str.indexOf(value);
+  const l = str.slice(0, index);
+  const r = str.slice(index + value.length);
+  return l + r;
 }
 
 /**
@@ -213,17 +209,26 @@ function extractEmails(str) {
  *             '└──────────┘\n'
  *
  */
-function getRectangleString(width, height) {
-  for (let i = 0; i < height; i++) {
-    if (i === 0) {
-      const str = ['┌'];
-      for (let k = 1; k < width; k++) {
-        str.push('─');
-      }
-      str.push('┐\n');
-      console.log(str.join('').toString());
+function getRectangleString(w, h) {
+  const symbol = (value, count) => {
+    const result = [];
+    for (let i = 1; i <= count; i += 1) {
+      result.push(value);
+    }
+    return result.join('');
+  };
+
+  const row = (s1, s2, s3) => [s1, symbol(s2, w - 2), s3, '\n'].join('');
+  const str = [];
+  str.push(row('┌', '─', '┐'));
+  if (h > 2) {
+    for (let i = 1; i <= h - 2; i += 1) {
+      str.push(row('│', ' ', '│'));
     }
   }
+  str.push(row('└', '─', '┘'));
+
+  return str.join('');
 }
 
 
