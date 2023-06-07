@@ -1,11 +1,10 @@
 // * Example :
-//   *   [ 1, 1, 1, 1, 1 ]        => [ 1, 2, 3, 4, 5 ]
-// *   [ 10, -10, 10, -10, 10 ] => [ 10, 0, 10, 0, 10 ]
-// *   [ 0, 0, 0, 0, 0]         => [ 0, 0, 0, 0, 0]
-// *   [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] => [ 1, 3, 6, 10, 15, 21, 28, 36, 45, 55 ]
+//   * [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] => [ 2, 4, 6, 8, 10 ]
+// * [ 'a', 'b', 'c' , null ]  => [ "b", null ]
+// * [ "a" ] => []
 // */
-function getMovingSum(arr) {
-  return arr.map((n, index, array) => n + (array[n - 1] || 0));
+function getSecondItems(arr) {
+  return arr.filter((n, i) => i % 2 !== 0);
 }
 
-console.log(getMovingSum([ 1, 1, 1, 1, 1 ]));
+console.log(getSecondItems( [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] ));
