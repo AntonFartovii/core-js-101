@@ -1,10 +1,32 @@
-// * Example :
-//   * [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] => [ 2, 4, 6, 8, 10 ]
-// * [ 'a', 'b', 'c' , null ]  => [ "b", null ]
-// * [ "a" ] => []
+const array = [
+  { country: 'Belarus', city: 'Brest' },
+{ country: 'Russia', city: 'Omsk' },
+{ country: 'Russia', city: 'Samara' },
+{ country: 'Belarus', city: 'Grodno' },
+{ country: 'Belarus', city: 'Minsk' },
+{ country: 'Poland', city: 'Lodz' }
+];
+
+const keySelector = item => item.country;
+const valueSelector = item => item.city;
+// *            =>
+// *   Map {
+// *    "Belarus" => ["Brest", "Grodno", "Minsk"],
+// *    "Russia" => ["Omsk", "Samara"],
+// *    "Poland" => ["Lodz"]
+//   *   }
 // */
-function getSecondItems(arr) {
-  return arr.filter((n, i) => i % 2 !== 0);
+function group(array, keySelector, valueSelector) {
+  const map = new Map();
+  array.forEach((item) => {
+    const values = map.get(keySelector(item));
+    if (values) {
+      map.set(keySelector(item), [...values, valueSelector(item)]);
+    } else {
+      map.set(keySelector(item), [valueSelector(item)]);
+    }
+  });
+  return map;
 }
 
-console.log(getSecondItems( [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] ));
+group(array, keySelector, valueSelector)
