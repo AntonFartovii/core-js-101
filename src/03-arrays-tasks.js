@@ -21,16 +21,7 @@
  *    [0, 1, 2, 3, 4, 5], 5    => 5
  */
 function findElement(arr, value) {
-  let res;
-  for (let i = 0; i < arr.length; i += 1) {
-    if (arr[i] === value) {
-      res = i;
-    }
-  }
-  if (!res) {
-    return -1;
-  }
-  return res;
+  return arr.indexOf(value);
 }
 
 /**
@@ -45,11 +36,7 @@ function findElement(arr, value) {
  *    5 => [ 1, 3, 5, 7, 9 ]
  */
 function generateOdds(len) {
-  const arr = [];
-  for (let i = 1; i <= len; i += 1) {
-    arr.push((i * 2) - 1);
-  }
-  return arr;
+  return Array.from(Array(len * 2).keys()).filter((e) => e % 2 !== 0);
 }
 
 
@@ -82,13 +69,7 @@ function doubleArray(arr) {
  *    [] => []
  */
 function getArrayOfPositives(arr) {
-  const res = [];
-  arr.forEach((item) => {
-    if (item > 0) {
-      res.push(item);
-    }
-  });
-  return res;
+  return arr.filter((e) => e > 0);
 }
 
 /**
@@ -103,13 +84,7 @@ function getArrayOfPositives(arr) {
  *    [ 'cat, 'dog', 'raccoon' ] => [ 'cat', 'dog', 'raccoon' ]
  */
 function getArrayOfStrings(arr) {
-  const res = [];
-  arr.forEach((item) => {
-    if (typeof item === 'string') {
-      res.push(item);
-    }
-  });
-  return res;
+  return arr.filter((e) => typeof e === 'string');
 }
 
 /**
@@ -126,13 +101,7 @@ function getArrayOfStrings(arr) {
  *    [ false, 0, NaN, '', undefined ]   => [ ]
  */
 function removeFalsyValues(arr) {
-  const res = [];
-  arr.forEach((item) => {
-    if (item) {
-      res.push(item);
-    }
-  });
-  return res;
+  return arr.filter((e) => e);
 }
 
 /**
@@ -304,14 +273,7 @@ function getSecondItems(arr) {
  *  [ 1,2,3,4,5 ] => [ 1, 2,2, 3,3,3, 4,4,4,4, 5,5,5,5,5 ]
  */
 function propagateItemsByPositionIndex(arr) {
-  if (arr.length === 0) return [];
-  const res = [];
-  arr.forEach((e, i) => {
-    for (let k = 1; k <= i + 1; k += 1) {
-      res.push(e);
-    }
-  });
-  return res;
+  return arr.map((e, i) => Array(i + 1).fill(e)).flat();
 }
 
 
@@ -329,13 +291,7 @@ function propagateItemsByPositionIndex(arr) {
  *   [ 10, 10, 10, 10 ] => [ 10, 10, 10 ]
  */
 function get3TopItems(arr) {
-  const l = arr.length;
-  if (l <= 3) return arr.reverse();
-  const res = [];
-  for (let i = l - 1; i > l - 4; i -= 1) {
-    res.push(arr[i]);
-  }
-  return res;
+  return arr.sort((a, b) => b - a).slice(0, 3);
 }
 
 
@@ -510,16 +466,7 @@ function sortCitiesArray(arr) {
  *           [0,0,0,0,1]]
  */
 function getIdentityMatrix(n) {
-  const res = Array(n);
-  for (let i = 1; i <= n; i += 1) {
-    const arr = Array(n);
-    for (let k = 0; k < n; k += 1) {
-      arr[k] = 0;
-      arr[i - 1] = 1;
-    }
-    res[i - 1] = arr;
-  }
-  return res;
+  return Array(n).fill(0).map((e, i) => Array(n).fill(0).fill(1, i, i + 1));
 }
 
 /**
@@ -536,11 +483,11 @@ function getIdentityMatrix(n) {
  *     3, 3   => [ 3 ]
  */
 function getIntervalArray(start, end) {
-  const res = [];
-  for (let k = start; k <= end; k += 1) {
-    res.push(k);
-  }
-  return res;
+  let res = start;
+  return Array(end - start + 1).fill(0).map(() => {
+    res += 1;
+    return res - 1;
+  });
 }
 
 /**
@@ -555,13 +502,8 @@ function getIntervalArray(start, end) {
  *   [ 1, 1, 2, 2, 3, 3, 4, 4] => [ 1, 2, 3, 4]
  */
 function distinct(arr) {
-  const res = [];
-  for (let k = 0; k <= arr.length - 1; k += 1) {
-    if (!res.includes(arr[k])) {
-      res.push(arr[k]);
-    }
-  }
-  return res;
+  return Array.from(arr.reduce((acc, cur) => acc.add(cur),
+    new Set()));
 }
 
 /**
@@ -595,13 +537,17 @@ function distinct(arr) {
  *   }
  */
 function group(array, keySelector, valueSelector) {
-  const map = new Map();
-  array.forEach((item) => {
-    const state = map.get(keySelector(item));
-    const values = state ? [...state, valueSelector(item)] : [valueSelector(item)];
-    map.set(keySelector(item), values);
-  });
-  return map;
+  return array.reduce((acc, cur) => {
+    let arrOfKey;
+    if (acc.get(keySelector(cur))) {
+      arrOfKey = acc.get(keySelector(cur));
+    } else {
+      arrOfKey = [];
+    }
+    arrOfKey.push(valueSelector(cur));
+    acc.set(keySelector(cur), arrOfKey);
+    return acc;
+  }, new Map());
 }
 
 
